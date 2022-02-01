@@ -490,8 +490,19 @@ class RestService:
                     "Failed to authenticate through CAM. Expected status_code 200, received status_code: "
                     + str(response.status_code))
             elif 'cam_passport' not in response.cookies:
-                raise RuntimeError(
-                    "Failed to authenticate through CAM. HTTP response does not contain 'cam_passport' cookie")
+                chrome_options = Options()
+                chrome_options.add_argument("--headless")
+                chrome_options.add_argument("--window-size=1920x1080")
+#!!!Chromedriver needs to be downloaded
+                driver = webdriver.Chrome(chrome_options = chrome_options, executable_path = r'C:\Program Files\Python310\Tools\TM1py\chromedriver.exe')
+                driver.get('https://defrapaibmt007.onetakeda.com:443/ibmcognos/bi/v1/disp')
+                #time.sleep(3)
+                cookie_dictionary = driver.get_cookie('cam_passport')
+                cookie = cookie_dictionary['value']
+                if cookie == '':
+                    raise RuntimeError(
+                        "Failed to authenticate through CAM. HTTP response does not contain 'cam_passport' cookie")
+                return 'CAMPassport' + ' '  + cookie
             else:
                 return 'CAMPassport ' + response.cookies['cam_passport']
         else:
