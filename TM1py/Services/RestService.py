@@ -17,6 +17,9 @@ from requests.adapters import HTTPAdapter
 from TM1py.Exceptions.Exceptions import TM1pyTimeout
 from TM1py.Utils import case_and_space_insensitive_equals, CaseAndSpaceInsensitiveSet
 
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 try:
     from requests_negotiate_sspi import HttpNegotiateAuth
 except ImportError:
@@ -495,8 +498,8 @@ class RestService:
                 chrome_options.add_argument("--window-size=1920x1080")
 #!!!Chromedriver needs to be downloaded
                 driver = webdriver.Chrome(chrome_options = chrome_options, executable_path = r'C:\Program Files\Python310\Tools\TM1py\chromedriver.exe')
-                driver.get('https://defrapaibmt007.onetakeda.com:443/ibmcognos/bi/v1/disp')
-                #time.sleep(3)
+                driver.get(gateway)
+                time.sleep(3)
                 cookie_dictionary = driver.get_cookie('cam_passport')
                 cookie = cookie_dictionary['value']
                 if cookie == '':
